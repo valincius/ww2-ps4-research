@@ -57,7 +57,7 @@
       <AdditionalDependencies>libSceNet_stub_weak.a;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>powershell -ExecutionPolicy Unrestricted $(SolutionDir)$(Platform)_$(Configuration)\upload.ps1</Command>
+      <!-- <Command>powershell -ExecutionPolicy Unrestricted $(SolutionDir)$(Platform)_$(Configuration)\upload.ps1</Command> -->
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'">
