@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28714.193
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WW2-PS4-PRX", "WW2-PS4-PRX.vcxproj", "{85B5170C-185C-454B-BA15-0A9354D7D2CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ORBIS = Debug|ORBIS
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ORBIS = Release|ORBIS
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Debug|ORBIS.ActiveCfg = Debug|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Debug|ORBIS.Build.0 = Debug|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Debug|x64.ActiveCfg = Debug|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Debug|x86.ActiveCfg = Debug|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Release|ORBIS.ActiveCfg = Release|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Release|ORBIS.Build.0 = Release|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Release|x64.ActiveCfg = Release|ORBIS
+		{85B5170C-185C-454B-BA15-0A9354D7D2CC}.Release|x86.ActiveCfg = Release|ORBIS
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FBC401E-3B20-4AB2-88B8-016334B642E4}
+	EndGlobalSection
+EndGlobal
