@@ -15,9 +15,10 @@
 
 # Build results
 [Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
+ORBIS_[Dd]ebug/
+ORBIS_[Dd]ebugPublic/
+ORBIS_[Rr]elease/
+ORBIS_[Rr]eleases/
 x64/
 x86/
 [Aa][Rr][Mm]/
