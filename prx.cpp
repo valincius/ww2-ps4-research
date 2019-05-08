@@ -1,33 +1,16 @@
 #include <_pthread.h>
 #include <string>
+#include <functional>
+#include <queue>
 
 #include "logger.h"
+#include "Controller.h"
 
 uint64_t g_entity(int client, int offset = 0x0) {
 	return (0x0C628A10 + (client * 0x418) + offset);
 }
 uint64_t player_state(int client, int offset = 0x0) {
 	return (0x0C9C82C0 + (client * 0x6180) + offset);
-}
-
-void dump_memory(void *address, size_t count) {
-	size_t line_count = 16;
-	for (int x = 0; x < count / line_count; x++) {
-		Logger::log("%08X    ", (uint32_t)(size_t)address + (x * line_count));
-		for (int i = 0; i < line_count; i++) {
-			unsigned char character = *(unsigned char*)((uint32_t)(size_t)address + ((x * line_count) + i));
-			Logger::log("%02X ", character);
-		}
-		Logger::log("    ");
-		for (int i = 0; i < line_count; i++) {
-			unsigned char character = *(unsigned char*)((uint32_t)(size_t)address + ((x * line_count) + i));
-			if (character <= 0x20 || character >= 0x7F) {
-				character = '.';
-			}
-			Logger::log("%c ", character);
-		}
-		Logger::log("\n");
-	}
 }
 
 void PatchInJump(uint64_t address, void* destination) {
@@ -102,6 +85,10 @@ uint32_t G_MaterialIndex(const char* material) {
 	return sub_917430(material, 4472, 0x1FF, *(int32_t *)0xC472750, "material");
 }
 
+void HudElem_DestroyAll() {
+	((void(*)())0xD6E090)();
+}
+
 HudElement* spawnHudElem(uint32_t client, float x, float y, uint32_t rgba) {
 	HudElement* hud = HudElemAlloc(client, 0);
 
@@ -157,39 +144,171 @@ void moveOverTime(HudElement* hud, char seconds, float x, float y) {
 	hud->x = x;
 	hud->y = y;
 }
+namespace Menu {
+	class Option {
+		std::string m_text;
+		HudElement* m_hud;
+		std::function<void(Option *)> m_function;
+
+	public:
+		Option(std::string text, std::function<void(Option*)> function) {
+			m_text = text;
+			m_function = function;
+			m_hud = spawnText(0, 0, 0, 0xFFFFFFFF, m_text.c_str(), 1, 1.0);
+		}
+		void Call() {
+			m_function(this);
+		}
+		HudElement* Hud() {
+			return m_hud;
+		}
+	};
+	class Menu {
+		int m_currentOptionIndex;
+		bool m_open;
+		std::vector<Option *> m_options;
+
+	public:
+		Menu() {
+			m_currentOptionIndex = 0;
+		}
+		bool IsOpen() {
+			return m_open;
+		}
+		void Open() {
+			for(auto option : m_options) {
+				option->Hud()->argb.a = 255;
+			}
+			m_open = true;
+		}
+		void Close() {
+			for(auto option : m_options) {
+				option->Hud()->argb.a = 0;
+			}
+			m_open = false;
+		}
+		int OptionCount() {
+			return m_options.size();
+		}
+		Option *CurrentOption() {
+			return m_options[m_currentOptionIndex];
+		}
+		void ChangeOption(int index) {
+			CurrentOption()->Hud()->argb.argb = 0xFFFFFFFF;
+			m_currentOptionIndex = index < 0 ? 0 : index >= OptionCount() ? (OptionCount() - 1) : index;
+			CurrentOption()->Hud()->argb.argb = 0xFFFF0000;
+		}
+		void PrevOption() {
+			ChangeOption(m_currentOptionIndex - 1);
+		}
+		void NextOption() {
+			ChangeOption(m_currentOptionIndex + 1);
+		}
+		Option *AddOption(std::string text, std::function<void(Option*)> function) {
+			Option *option = new Option(text, function);
+			option->Hud()->y = OptionCount() * 25.0f;
+
+			if(OptionCount() == 0) {
+				option->Hud()->argb.argb = 0xFFFF0000;
+			}
+
+			m_options.push_back(option);
+
+
+			return option;
+		}
+	};
+};
+
+/*
+	not thread safe. needs some changes.
+	maybe just spawn a new thread for every option click?
+*/
+std::queue<Menu::Option*> optionQueue;
+void* callbackThread(void*) {
+	while (true) {
+		while(!optionQueue.empty()) {
+			Menu::Option* option = optionQueue.front();
+			option->Call();
+			optionQueue.pop();
+		}
+	}
+}
+
 
 void* mainThread(void*) {
-	sceKernelSleep(1);
-	Logger::log("Thread has started...\n");
+	Controller controller;
+	Logger::log("Found controller ID %i\n", controller.get_handle());
 
-	HudElement* shader = spawnShader(0, 0, 100, 0x00FF00FF, "white", 100, 100);
-	scaleOverTime(shader, 5000, 500, 500);
+	HudElem_DestroyAll();
 
-	HudElement* text = spawnText(0, 0, 100, 0xFF0000FF, "Hello", 0, 3.0);
-	moveOverTime(text, 5000, 50, 150);
+	Menu::Menu mainMenu;
+	mainMenu.AddOption("Test option 1", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
+	mainMenu.AddOption("Test option 2", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
+	mainMenu.AddOption("Test option 3", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
+	mainMenu.AddOption("Test option 4", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
+	mainMenu.AddOption("Test option 5", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
+	mainMenu.AddOption("Test option 6", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
+	mainMenu.AddOption("Test option 7", [](Menu::Option * option) {
+		option->Hud()->argb.argb = 0xFF0000FF;
+	});
 
 	while (true) {
-		sceKernelSleep(1);
-	}
+		controller.update_button_state();
 
-	Logger::log("Done running!\n");
+		if(controller.is_button_pressed(SCE_PAD_BUTTON_UP)) {
+			!mainMenu.IsOpen() ?
+				mainMenu.Open() :
+				mainMenu.PrevOption();
+
+			sceKernelUsleep(200);
+		}
+		if(controller.is_button_pressed(SCE_PAD_BUTTON_DOWN)) {
+			mainMenu.NextOption();
+
+			sceKernelUsleep(200);
+		}
+		if(controller.is_button_pressed(SCE_PAD_BUTTON_CROSS)) {
+			optionQueue.push(mainMenu.CurrentOption());
+
+			sceKernelUsleep(200);
+		}
+		if(controller.is_button_pressed(SCE_PAD_BUTTON_SQUARE)) {
+			mainMenu.Close();
+
+			sceKernelUsleep(200);
+		}
+
+		sceKernelUsleep(1);
+	}
 }
 
 ScePthread main_thread;
+ScePthread callback_thread;
 extern "C" {
 	int module_start(size_t args, const void* argp) {
 		Logger::initialize();
-		Logger::log("Called module_start()\n");
 
 		scePthreadSetcancelstate(PTHREAD_CANCEL_ENABLE, 0);
 
 		scePthreadCreate(&main_thread, NULL, mainThread, NULL, "Main Thread");
+		scePthreadCreate(&callback_thread, NULL, callbackThread, NULL, "Callback Thread");
 
 		return 0;
 	}
 	int module_stop(size_t args, const void* argp) {
-		Logger::log("Called module_stop()\n");
-		
 		Logger::destory();
 
 		scePthreadCancel(main_thread);

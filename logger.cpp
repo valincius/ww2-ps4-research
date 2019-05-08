@@ -38,15 +38,38 @@ std::vector<std::string> Split(const std::string& str, int splitLength) {
 	return ret;
 }
 
+void dump_memory(void* address, size_t count) {
+	size_t line_count = 16;
+	for(int x = 0; x < (count * line_count) / line_count; x++) {
+		Logger::log("%08X    ", (uint32_t)(size_t)address + (x * line_count));
+		for(int i = 0; i < line_count; i++) {
+			unsigned char character = *(unsigned char*)((uint32_t)(size_t)address + ((x * line_count) + i));
+			Logger::log("%02X ", character);
+		}
+		Logger::log("    ");
+		for(int i = 0; i < line_count; i++) {
+			unsigned char character = *(unsigned char*)((uint32_t)(size_t)address + ((x * line_count) + i));
+			if(character <= 0x20 || character >= 0x7F) {
+				character = '.';
+			}
+			Logger::log("%c ", character);
+		}
+		Logger::log("\n");
+	}
+}
+
 void Logger::clientThread(int client_socket) {
 	while (true) {
+		Logger::log("PS4> ");
+
 		char buffer[1024];
 		sceNetRecv(client_socket, buffer, 1024, NULL);
 
 		std::istringstream iss(buffer);
 		std::vector<std::string> tokens { std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>{} };
+		int tokenCount = tokens.size();
 
-		if (tokens[0] == "write") {
+		if (tokens[0] == "write" && tokenCount == 4) {
 			uint32_t address = std::stoi(tokens[1], nullptr, 16);
 			uint32_t offset = std::stoi(tokens[2], nullptr, 16);
 
@@ -57,6 +80,14 @@ void Logger::clientThread(int client_socket) {
 				index++;
 			}
 		}
+		if (tokens[0] == "read" && tokenCount == 4) {
+			uint32_t address = std::stoi(tokens[1], nullptr, 16);
+			uint32_t offset = std::stoi(tokens[2], nullptr, 16);
+			uint8_t count = std::stoi(tokens[3], nullptr, 10);
+
+			dump_memory((void *)(address + offset), count);
+		}
+		Logger::log("\n");
 	}
 }
 
@@ -122,10 +153,7 @@ void Logger::log(const char *message, ...) {
 	vsnprintf(msg, sizeof(msg), message, args);
 	va_end(args);
 
-	char whole_msg[1100];
-	snprintf(whole_msg, sizeof(whole_msg), "%s", msg);
-
 	for (int i = 0; i < client_connection_count; i++) {
-		sceNetSend(client_connections[i], whole_msg, strlen(whole_msg), 0);
+		sceNetSend(client_connections[i], msg, strlen(msg), 0);
 	}
 }
