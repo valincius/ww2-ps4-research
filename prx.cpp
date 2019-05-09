@@ -170,6 +170,8 @@ TODO
 	Create a configure kinda thing for the menus
 	Make menu design a little more appealing
 	Have some different variants for the function types accepted for the options
+	Seperate out Controller.h and HudElement.h to .cpp & .h
+	Normalize coding style throughout (VS keeps changing how I write everything out)
 */
 
 void* mainThread(void*) {
