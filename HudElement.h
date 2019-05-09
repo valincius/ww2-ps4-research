@@ -36,7 +36,7 @@ namespace HudElements {
 		uint32_t type; // 0x1c
 		float fontScale; // 0x20
 		char padding_1[0x0C]; // 0x24
-		Color_s argb; // 0x30
+		Color_s rgba; // 0x30
 		char padding_2[0x10]; // 0x34
 		uint32_t width; // 0x44
 		uint32_t height; // 0x48
@@ -90,7 +90,7 @@ namespace HudElements {
 			return this;
 		}
 		HudElement* SetColor(Color_s color) {
-			m_hud->argb = color;
+			m_hud->rgba = color;
 
 			return this;
 		}

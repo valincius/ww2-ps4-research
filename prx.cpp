@@ -172,6 +172,7 @@ TODO
 	Have some different variants for the function types accepted for the options
 	Seperate out Controller.h and HudElement.h to .cpp & .h
 	Normalize coding style throughout (VS keeps changing how I write everything out)
+	Fix up missing parts of HudElem_s
 */
 
 void* mainThread(void*) {
