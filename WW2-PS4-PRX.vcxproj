@@ -59,6 +59,9 @@
     <PostBuildEvent>
       <!-- <Command>powershell -ExecutionPolicy Unrestricted $(SolutionDir)$(Platform)_$(Configuration)\upload.ps1</Command> -->
     </PostBuildEvent>
+    <PostBuildEvent>
+      <Command>powershell -ExecutionPolicy Unrestricted $(SolutionDir)$(Platform)_$(Configuration)\upload.ps1</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ORBIS'">
     <ClCompile>
@@ -76,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="HudElement.h" />
     <ClInclude Include="logger.h" />
   </ItemGroup>
   <Import Condition="'$(ConfigurationType)' == 'Makefile' and Exists('$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets')" Project="$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets" />
