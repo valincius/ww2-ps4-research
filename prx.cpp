@@ -46,10 +46,10 @@ namespace Menu {
 	class Option {
 		std::string m_text;
 		HudElements::Text* m_hud;
-		std::function<void(Option*)> m_function;
+		std::function<void()> m_function;
 
 	public:
-		Option(std::string text, std::function<void(Option*)> function) {
+		Option(std::string text, std::function<void()> function) {
 			m_text = text;
 			m_function = function;
 
@@ -57,7 +57,7 @@ namespace Menu {
 			m_hud->Hud()->SetVisible(false);
 		}
 		void Call() {
-			m_function(this);
+			m_function();
 		}
 		HudElements::Text* Hud() {
 			return m_hud;
@@ -169,10 +169,11 @@ TODO
 	Make some standard colors so we don't have to repeat everything every time
 	Create a configure kinda thing for the menus
 	Make menu design a little more appealing
-	Have some different variants for the function types accepted for the options
+	Have some different variants for the function types accepted for the options -- removed ugly Option*
 	Seperate out Controller.h and HudElement.h to .cpp & .h
 	Normalize coding style throughout (VS keeps changing how I write everything out)
 	Fix up missing parts of HudElem_s
+	Maybe maybe Menu::Menu a singleton or something? Don't see why we'd have more than one of these
 */
 
 void* mainThread(void*) {
@@ -185,34 +186,34 @@ void* mainThread(void*) {
 		{
 			"Sub Menu 1",
 			{
-				Menu::Option("Option 1", [](Menu::Option*) {}),
-				Menu::Option("Option 2", [](Menu::Option*) {}),
-				Menu::Option("Option 3", [](Menu::Option*) {}),
+				{ "Option 1", []() {} },
+				{ "Option 2", []() {} },
+				{ "Option 3", []() {} },
 			},
 		},
 		{
 			"Sub Menu 2",
 			{
-				Menu::Option("Option 1", [](Menu::Option*) {}),
-				Menu::Option("Option 2", [](Menu::Option*) {}),
-				Menu::Option("Option 3", [](Menu::Option*) {}),
-				Menu::Option("Option 4", [](Menu::Option*) {}),
-				Menu::Option("Option 5", [](Menu::Option*) {}),
+				{ "Option 1", []() {} },
+				{ "Option 2", []() {} },
+				{ "Option 3", []() {} },
+				{ "Option 4", []() {} },
+				{ "Option 5", []() {} },
 			},
 		},
 		{
 			"Sub Menu 3",
 			{
-				Menu::Option("Option 1", [](Menu::Option*) {}),
-				Menu::Option("Option 2", [](Menu::Option*) {}),
-				Menu::Option("Option 3", [](Menu::Option*) {}),
-				Menu::Option("Option 4", [](Menu::Option*) {}),
-				Menu::Option("Option 5", [](Menu::Option*) {}),
-				Menu::Option("Option 6", [](Menu::Option*) {}),
-				Menu::Option("Option 7", [](Menu::Option*) {}),
-				Menu::Option("Option 8", [](Menu::Option*) {}),
-				Menu::Option("Option 9", [](Menu::Option*) {}),
-				Menu::Option("Option 10", [](Menu::Option*) {}),
+				{ "Option 1", []() {} },
+				{ "Option 2", []() {} },
+				{ "Option 3", []() {} },
+				{ "Option 4", []() {} },
+				{ "Option 5", []() {} },
+				{ "Option 6", []() {} },
+				{ "Option 7", []() {} },
+				{ "Option 8", []() {} },
+				{ "Option 9", []() {} },
+				{ "Option 10", []() {} },
 			},
 		},
 	});
