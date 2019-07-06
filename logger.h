@@ -1,5 +1,6 @@
 #pragma once
 
+#include <_pthread.h>
 #include <vector>
 
 #define MAX_CLIENT_CONNECTIONS 10

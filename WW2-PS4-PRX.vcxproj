@@ -74,13 +74,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="logger.cpp" />
+    <ClCompile Include="HudElement.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="ModMenu.cpp" />
     <ClCompile Include="prx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
     <ClInclude Include="HudElement.h" />
-    <ClInclude Include="logger.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="ModMenu.h" />
   </ItemGroup>
   <Import Condition="'$(ConfigurationType)' == 'Makefile' and Exists('$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets')" Project="$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
