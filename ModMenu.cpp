@@ -47,6 +47,12 @@ void Menu::SetOpenState(bool state) {
 	if(state) {
 		ChangeMenu(m_TopMenuIndex);
 	}
+	else {
+		// hide menu huds here
+		for(auto hud : MenuTextHuds) {
+			hud->SetVisible(false);
+		}
+	}
 }
 void Menu::GoBack() {
 	if(m_CurrentMenuIndex != m_TopMenuIndex) {
@@ -64,10 +70,17 @@ void Menu::ChangeMenu(int menuIndex) {
 	m_CurrentMenuIndex = menuIndex;
 
 	int i = 0;
-	for(auto option : Options[m_CurrentMenuIndex]) {
-		MenuTextHuds[i]
-			->SetText(option.Text.c_str())
-			->SetColor({ 255, 255, 255 });
+	for(auto hud : MenuTextHuds) {
+		auto options = Options[m_CurrentMenuIndex];
+		if(i < options.size()) {
+			MenuTextHuds[i]
+				->SetText(options[i].Text.c_str())
+				->SetColor({ 255, 255, 255 })
+				->SetVisible();
+		}
+		else {
+			hud->SetVisible(false);
+		}
 		i++;
 	}
 

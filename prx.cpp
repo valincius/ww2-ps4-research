@@ -42,11 +42,7 @@ void PatchInJump(uint64_t address, void* destination) {
 
 void* mainThread(void*) {
 	auto controllerHud = HudElements::Text(0, "Waiting to find controller...", 1, 80.0, { 255, 255, 255 }, 7, .75);
-
 	Controller controller;
-	Logger::log("Found controller ID %i\n", controller.get_handle());
-
-	controllerHud.SetText("Found controller!");
 
 	HudElements::DestroyAll();
 

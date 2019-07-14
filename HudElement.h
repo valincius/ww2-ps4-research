@@ -68,7 +68,7 @@ namespace HudElements {
 		HudElement(int client = 0, int team = 0);
 		HudElement* Hud();
 		HudElement_s* Ptr();
-		HudElement* SetVisible(bool visible);
+		HudElement* SetVisible(bool visible = true);
 		HudElement* SetColor(Color_s color);
 		HudElement* SetPosition(float x, float y);
 
