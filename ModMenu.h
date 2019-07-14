@@ -3,6 +3,8 @@
 #include <vector>
 #include <functional>
 #include <algorithm>
+#include <string>
+#include <map>
 
 #include "HudElement.h"
 
@@ -28,7 +30,8 @@ namespace ModMenu {
 		static std::vector<int> PrevMenuIndexes;
 		static std::vector<int> MenuIndexes;
 		static std::vector<std::vector<Option>> Options;
-		static std::vector<HudElements::Text *> MenuTextHuds;
+		static std::vector<HudElements::Text *> OptionsTextHuds;
+		static std::map<std::string, HudElements::HudElement *> HudElements;
 
 		static void Init(std::vector<Option> options);
 		static bool IsOpen();
@@ -45,5 +48,7 @@ namespace ModMenu {
 		static void ScrollNext();
 
 		static void Invoke();
+
+		static std::string CurrentMenuTitle();
 	};
 };

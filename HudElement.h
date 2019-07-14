@@ -79,7 +79,7 @@ namespace HudElements {
 	class Text : public HudElement {
 	public:
 		Text();
-		Text(int client, const char* text, float x = 1.0, float y = 1.0, Color_s rgba = 0xFFFFFFFF, uint32_t font = 0x07, float fontScale = 1.0);
+		Text(int client, const char* text, float x = 1.0, float y = 1.0, Color_s rgba = 0xFFFFFFFF, uint32_t font = 0x07, float fontScale = 1.0, bool visible = true);
 		Text* SetText(const char* text);
 		Text* SetFont(uint32_t font);
 		Text* SetFontScale(float fontScale);

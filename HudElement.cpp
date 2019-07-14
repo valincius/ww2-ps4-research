@@ -74,7 +74,7 @@ namespace HudElements {
 	}
 
 	Text::Text() {}
-	Text::Text(int client, const char* text, float x, float y, Color_s rgba, uint32_t font, float fontScale) {
+	Text::Text(int client, const char* text, float x, float y, Color_s rgba, uint32_t font, float fontScale, bool visible) {
 		HudElement::HudElement(client, 0);
 
 		m_hud->type = 0x01;
@@ -84,6 +84,7 @@ namespace HudElements {
 		SetPosition(x, y);
 		SetText(text);
 		SetColor({ rgba.r, rgba.g, rgba.b, rgba.a });
+		SetVisible(visible);
 	}
 	Text* Text::SetText(const char* text) {
 		m_hud->localizeStringIndex = G_LocalizedStringIndex(text);
